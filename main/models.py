@@ -6,14 +6,24 @@ class User(AbstractUser):
     profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True, default='profiles/default.png')
     rating = models.IntegerField(default=0)
     is_moderator = models.BooleanField(default=False)
-    is_admin_panel = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
+    is_banned = models.BooleanField(default=False)
+
+class BanUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    banned_by = models.ForeignKey(User, related_name='bans_made', on_delete=models.SET_NULL, null=True)
+    reason = models.TextField()
 
     # В моделі юзер немає username, email і т.д тому що це все вже є в вбудованій моделі AbstractUser
+
+class Category(models.Model):
+    name = models.CharField(max_length=32, unique=True)
 
 class Thread(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(null=False, validators=[MinLengthValidator(3)], max_length=80)
     content = models.TextField(null=False, validators=[MaxLengthValidator(2000)])
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='threads')
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Comment(models.Model):
@@ -27,5 +37,3 @@ class Comment(models.Model):
         ordering = ['created_at'] 
         # Для того щоб коментарі завжди сортувались по часу
 
-class Category(models.Model):
-    name = models.CharField(max_length=32, unique=True, on_delete=models.CASCADE)
