@@ -17,7 +17,7 @@ class BanUser(models.Model):
     # В моделі юзер немає username, email і т.д тому що це все вже є в вбудованій моделі AbstractUser
 
 class Category(models.Model):
-    name = models.CharField(max_length=32, unique=True)
+    title = models.CharField(max_length=32, unique=True)
 
 class Thread(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -25,8 +25,6 @@ class Thread(models.Model):
     content = models.TextField(null=False, validators=[MaxLengthValidator(2000)])
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='threads')
     created_at = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(blank=True)
     def __str__(self):
         return self.name
 

@@ -3,5 +3,5 @@ from .models import Theme
 
 @admin.register(Theme)
 class ThemeAdmin(admin.ModelAdmin):
-    list_display = ("name", "created_at")
+    list_display = ("title", "created_at")
 
