@@ -1,16 +1,15 @@
-{% extends "base.html" %}
 {% block content %}
-  <h1>Themes</h1>
-  <a href="{% url 'theme-add' %}">Add Theme</a>
-  <ul>
-    {% for theme in themes %}
-      <li>
-        <strong>{{ theme.name }}</strong>: {{ theme.description }}
-        [<a href="{% url 'theme-edit' theme.pk %}">Edit</a>]
-        [<a href="{% url 'theme-delete' theme.pk %}">Delete</a>]
-      </li>
-    {% empty %}
-      <li>No themes available.</li>
-    {% endfor %}
-  </ul>
+<h1>Themes</h1>
+<a href="{% url 'theme-add' %}">Add Theme</a>
+<ul>
+  {% for theme in themes %}
+  <li>
+    <strong>{{ theme.name }}</strong>: {{ theme.description }}
+    [<a href="{% url 'theme-edit' theme.pk %}">Edit</a>]
+    [<a href="{% url 'theme-delete' theme.pk %}">Delete</a>]
+  </li>
+  {% empty %}
+  <li>No themes available.</li>
+  {% endfor %}
+</ul>
 {% endblock %}
