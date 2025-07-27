@@ -7,6 +7,10 @@ def main_page(request):
 
 def ban_page(request):
     if not request.user.is_authenticated:
-            return render(request, 'main/error_page.html')
-    if BanUser.DoesNotExist:
-            return render(request, 'main/error_page.html')
+        return render(request, 'main/error_page.html')
+    try:
+        BanUser.objects.get(user=request.user)
+    except BanUser.DoesNotExist:
+        return render(request, 'main/error_page.html')
+
+    return render(request, 'main/ban_page.html')
