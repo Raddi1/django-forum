@@ -1,7 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import User, BanUser, Category, Comment, Thread
 
-# Create your views here.
 def main_page(request):
   return render(request, 'main/index.html')
 
@@ -14,3 +13,36 @@ def ban_page(request):
         return render(request, 'main/error_page.html')
 
     return render(request, 'main/ban_page.html')
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def main_page(request):
+    return render(request, 'main/index.html')
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('main_page')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'main/login.html', {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('login_view')
+
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login_view')
+    else:
+        form = UserCreationForm()
+    return render(request, 'main/register.html', {'form': form})
