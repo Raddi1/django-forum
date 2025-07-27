@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Theme
+from .models import Thread
 
-@admin.register(Theme)
+@admin.register(Thread)
 class ThemeAdmin(admin.ModelAdmin):
     list_display = ("title", "created_at")
 
