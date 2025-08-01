@@ -31,6 +31,9 @@ class ThemeDeleteView(DeleteView):
 def main_page(request):
   return render(request, 'main/index.html')
 
+def root_page(request):
+  return render(request, 'main/admin.html')
+
 def ban_page(request):
     if not request.user.is_authenticated:
         return render(request, 'main/error_page.html')
@@ -40,6 +43,10 @@ def ban_page(request):
         return render(request, 'main/error_page.html')
 
     return render(request, 'main/ban_page.html')
+
+def error_page(request, exception=None):
+    return render(request, 'main/error_page.html', status=500)
+
 ### Slay all
 ### dmc reference :3
 

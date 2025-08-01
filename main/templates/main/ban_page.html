@@ -1,12 +1,6 @@
-<!doctype html>
-<html lang="uk">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Аккаунт заблоковано</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+{% include 'main/base.html' %}
+{% include 'main/navbar.html' %}
+{% block content %}
 
 <body class="min-h-screen bg-[rgba(18,18,18,1)] text-white flex items-center justify-center p-6">
 
@@ -20,30 +14,28 @@
     </div>
 
     <div class="space-y-4">
-      <h1 class="text-3xl text-white">Аккаунт заблоковано</h1>
+      <h1 class="text-3xl text-white">Акаунт заблоковано</h1>
     </div>
 
     <div class="space-y-3">
       <p class="text-gray-400">Причина: Порушення правил форуму (а саме 2.21)</p>
     </div>
 
-    <div class="flex gap-3 justify-center">
+    <div class="flex justify-center items-center gap-5 mt-6">
       <a href="https://t.me/revo_exe"
-        class="bg-[rgba(121,250,16,1)] hover:bg-[rgba(100,200,13,1)] text-[rgba(11,25,6,1)] border-0 font-sans text-[16px] font-normal px-6 py-1 rounded-md transition">
-        Telegram
+        class="bg-white text-black text-base font-medium rounded-lg px-6 py-1.5 hover:bg-gray-200/90 transition-colors duration-200">
+        Підтримка
       </a>
 
-      <a href="https://ab3.army"
-        class="bg-[rgba(18,18,18,1)] border border-gray-600 text-white hover:bg-[rgba(35,35,35,1)] hover:text-white font-sans text-[16px] px-6 py-1 rounded-md transition">
+      <a href="https://t.me/revo_exe"
+        class="bg-white bg-opacity-15 text-white text-base font-medium rounded-lg px-6 py-1.5 hover:bg-gray-50/10 transition-colors duration-200">
         Правила
       </a>
     </div>
-
-    <p class="text-gray-500 text-xs">
-      Вважаєте блокування невірним? Напишіть нам у Telegram, щоб оскаржити це рішення.
-    </p>
   </div>
 
 </body>
 
 </html>
+
+{% endblock %}

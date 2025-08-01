@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-[rgb(18,18,18)] text-white">
+
+  <!-- Головний контейнер -->
+  <div class="flex h-screen">
+
+    <!-- Бокова панель -->
+    <aside
+      class="w-64 bg-[rgb(13,13,13)] flex flex-col justify-between rounded-r-2xl border-r-[2px] border-r-gray-200/20 font-normal">
+      <nav class="p-4 space-y-2">
+        <a href="#"
+          class="block px-3 py-2 rounded-lg bg-[rgb(16,16,16)] hover:bg-[rgb(22,22,22)] transition-colors duration-200">Головна</a>
+        <a href="#"
+          class="block px-2 py-2 rounded-lg bg-[rgb(16,16,16)] hover:bg-[rgb(22,22,22)] transition-colors duration-200">Користувачі</a>
+      </nav>
+    </aside>
+
+    <!-- Контент справа -->
+    <main class="flex-1 p-8 overflow-y-auto">
+      <h2 class="text-2xl font-semibold mb-4">main content</h2>
+    </main>
+
+  </div>
+
+</body>
+
+</html>

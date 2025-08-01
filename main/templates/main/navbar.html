@@ -1,0 +1,71 @@
+{% include 'main/base.html' %}
+{% block content %}
+
+
+{% if user.is_authenticated %}
+<header class="fixed top-0 left-0 w-full z-50 bg-[rgb(23,23,23)] text-white font-sans shadow-md/40">
+  <div class="container mx-auto flex h-12 items-center justify-between px-6">
+    <div class="flex items-center">
+      <nav class="hidden md:flex">
+        <ul class="flex items-center gap-5 text-sm">
+          <li>
+            <a href="{% url 'home_page' %}"
+              class="font-normal text-gray-50 hover:text-gray-400 transition-colors duration-200">
+              На головну</a>
+          </li>
+          <li>
+            <a href="#" class="font-normal text-gray-50 hover:text-gray-400 transition-colors duration-200">Правила</a>
+          </li>
+          <li>
+            <a href="#"
+              class="font-normal text-gray-50 hover:text-gray-400 transition-colors duration-200">Підтримка</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="hidden md:flex items-center gap-5">
+      <a href="{% url 'logout_page' %}"
+        class="text-white text-sm font-medium hover:text-gray-300 transition-colors duration-200">Вийти</a>
+      <a href="#"
+        class="bg-white text-black text-sm font-medium rounded-lg px-4 py-1 hover:bg-gray-200 transition-colors duration-200">Створити
+        тему
+      </a>
+    </div>
+
+  </div>
+</header>
+{% else %}
+<header class="fixed top-0 left-0 w-full z-50 bg-[rgb(23,23,23)] text-white font-sans shadow-md/40">
+  <div class="container mx-auto flex h-12 items-center justify-between px-6">
+    <div class="flex items-center">
+      <nav class="hidden md:flex">
+        <ul class="flex items-center gap-5 text-sm">
+          <li>
+            <a href="{% url 'home_page' %}"
+              class="font-normal text-gray-50 hover:text-gray-400 transition-colors duration-200">
+              На головну</a>
+          </li>
+          <li>
+            <a href="#" class="font-normal text-gray-50 hover:text-gray-400 transition-colors duration-200">Правила</a>
+          </li>
+          <li>
+            <a href="#"
+              class="font-normal text-gray-50 hover:text-gray-400 transition-colors duration-200">Підтримка</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="hidden md:flex items-center gap-5">
+      <a href="#" class="text-white text-sm font-medium hover:text-gray-300 transition-colors duration-200">Логін</a>
+      <a href="#"
+        class="bg-white text-black text-sm font-medium rounded-lg px-4 py-1 hover:bg-gray-200 transition-colors duration-200">Реєстрація
+      </a>
+    </div>
+
+  </div>
+</header>
+{% endif %}
+
+{% endblock %}
