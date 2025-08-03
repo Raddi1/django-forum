@@ -1,0 +1,52 @@
+{% include "main/base.html" %}
+{% include 'main/navbar.html' %}
+{% block content %}
+<body class="bg-[rgb(18,18,18)] min-h-screen flex items-center justify-center px-6">
+
+  <form method="post" action="{% url 'login' %}" class="w-72 space-y-4">
+    {% csrf_token %}
+
+    <div>
+      <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        required
+        class="w-full bg-transparent border border-white/30 rounded-md px-4 py-3 
+               text-white placeholder:text-white/60 
+               focus:outline-none focus:border-white transition-colors duration-200"/>
+    </div>
+    <div>
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        required
+        class="w-full bg-transparent border border-white/30 rounded-md px-4 py-3 
+               text-white placeholder:text-white/60 
+               focus:outline-none focus:border-white transition-colors duration-200"/>
+    </div>
+{% if form.errors %}
+  <p class="text-red-500 text-center">Неправильний логін або пароль.</p>
+{% endif %}
+    <div class="space-y-2">
+      <button
+        type="submit"
+        class="w-full bg-white text-black py-1.5 rounded-lg font-medium 
+               hover:bg-white/80 transition-colors duration-200">
+
+        Увійти
+      </button>
+      
+      <button
+        type="button" onclick="window.location.href='{% url 'register' %}'"
+        class="w-full bg-white bg-opacity-15 text-white py-1.5 text-base font-medium rounded-lg 
+               hover:bg-gray-50/10 transition-colors duration-200">
+
+        Реєстрація
+      </button>
+    </div>
+  </form>
+
+</body>
+{% endblock %}

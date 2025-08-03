@@ -1,4 +1,5 @@
 from django.urls import path, include
+from django.contrib.auth.views import LoginView, LogoutView
 from . import views
 
 urlpatterns = [
@@ -9,4 +10,9 @@ urlpatterns = [
   path("themes/<int:pk>/delete/", views.ThemeDeleteView.as_view(), name="theme-delete"),
   path('ban/', views.ban_page, name='ban_page'),
   path('root/', views.root_page, name='root_page'),
+
+
+  path("login/", LoginView.as_view(), name="login"),
+  path("register/", views.register_page, name="register"),
+  path("logout/", LogoutView.as_view(), name="logout"),
 ]

@@ -128,6 +128,9 @@ MEDIA_ROOT = BASE_DIR / 'images'
 
 AUTH_USER_MODEL = 'main.User'
 
+LOGIN_REDIRECT_URL = 'home_page'
+LOGOUT_REDIRECT_URL = 'home_page'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

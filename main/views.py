@@ -50,27 +50,5 @@ def error_page(request, exception=None):
 ### Slay all
 ### dmc reference :3
 
-def login_view(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('main_page')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'main/login.html', {'form': form})
-
-def logout_view(request):
-    logout(request)
-    return redirect('login_view')
-
-def register_view(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login_view')
-    else:
-        form = UserCreationForm()
-    return render(request, 'main/register.html', {'form': form})
+def register_page(request):
+    return render(request, 'register.html')

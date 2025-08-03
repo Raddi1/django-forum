@@ -3,18 +3,12 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 
 class User(AbstractUser):
-    profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True, default='profiles/default.png')
-    rating = models.IntegerField(default=0)
-    is_moderator = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
-    is_banned = models.BooleanField(default=False)
+    pass
 
 class BanUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     banned_by = models.ForeignKey(User, related_name='bans_made', on_delete=models.SET_NULL, null=True)
     reason = models.TextField()
-
-    # В моделі юзер немає username, email і т.д тому що це все вже є в вбудованій моделі AbstractUser
 
 class Category(models.Model):
     title = models.CharField(max_length=32, unique=True)
