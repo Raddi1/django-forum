@@ -14,13 +14,14 @@ class Category(models.Model):
     title = models.CharField(max_length=32, unique=True)
 
 class Thread(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='threads')
     title = models.CharField(null=False, validators=[MinLengthValidator(3)], max_length=80)
     content = models.TextField(null=False, validators=[MaxLengthValidator(2000)])
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='threads')
     created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
-        return self.name
+        return f"{self.title}"
 
 class Comment(models.Model):
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name='comments')
