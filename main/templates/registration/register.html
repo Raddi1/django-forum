@@ -1,18 +1,67 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
-</head>
-<body>
-    <h2>Register</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-    <p>Already have an account? <a href="{% url 'login_view' %}">Login here</a></p>
+{% include "main/base.html" %}
+{% include 'main/navbar.html' %}
+{% block content %}
+<body class="bg-[rgb(18,18,18)] min-h-screen flex items-center justify-center px-6">
+
+  <form method="post" action="{% url 'register' %}" class="w-72 space-y-4">
+    {% csrf_token %}
+
+    <div>
+      <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        required
+        class="w-full bg-transparent border border-white/30 rounded-md px-4 py-3 
+               text-white placeholder:text-white/60 
+               focus:outline-none focus:border-white transition-colors duration-200"/>
+    </div>
+
+    <div>
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        required
+        class="w-full bg-transparent border border-white/30 rounded-md px-4 py-3 
+               text-white placeholder:text-white/60 
+               focus:outline-none focus:border-white transition-colors duration-200"/>
+    </div>
+
+    <div>
+      <input
+        type="password"
+        name="password1"
+        placeholder="Password"
+        required
+        class="w-full bg-transparent border border-white/30 rounded-md px-4 py-3 
+               text-white placeholder:text-white/60 
+               focus:outline-none focus:border-white transition-colors duration-200"/>
+    </div>
+
+    <div>
+      <input
+        type="password"
+        name="password2"
+        placeholder="Confirm password"
+        required
+        class="w-full bg-transparent border border-white/30 rounded-md px-4 py-3 
+               text-white placeholder:text-white/60 
+               focus:outline-none focus:border-white transition-colors duration-200"/>
+    </div>
+{% if form.errors %}
+  <p class="text-red-500 text-center">Помилка, дані введено не вірно.</p>
+{% endif %}
+    <div class="space-y-2">
+      <button
+        type="submit"
+        class="w-full bg-white text-black py-1.5 rounded-lg font-medium 
+               hover:bg-white/80 transition-colors duration-200">
+
+        Відправити
+      </button>
+    </div>
+  </form>
+
 </body>
-</html>
-
-
-<!-- Не фул готово -->
+{% endblock %}

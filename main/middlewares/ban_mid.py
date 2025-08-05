@@ -14,10 +14,11 @@ class CheckBanMiddleware:
             BanUser.objects.get(user=request.user)
             return redirect('ban_page')
     except BanUser.DoesNotExist:
-            pass
+            print("Користувач не забанений, мідлвар скіпнув.")
     
-    # -----  Тут потрібно писати код який виконається ДО views.py, та наступного 
+    # -----  Тут потрібно писати код який виконається ДО views.py, та наступного middleware
 
     response = self.get_response(request)
+    return response
 
     # -----  Тут потрібно писати код який виконається ПІСЛЯ views.py
