@@ -73,7 +73,7 @@ class Migration(migrations.Migration):
                 ('content', models.TextField(validators=[django.core.validators.MaxLengthValidator(2000)])),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='threads', to='main.category')),
-                ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(

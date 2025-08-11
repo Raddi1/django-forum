@@ -1,11 +1,11 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, Comment
+from .models import User, Comment, author
 
 class CommentForm(forms.ModelForm):
   class Meta:
     model = Comment
-    fields = ['content', 'parent']
+    fields = ['content', 'author', 'parent']
     widget = {
         'content': forms.Textarea(attrs={'rows': 3}),
         'parent': forms.HiddenInput
