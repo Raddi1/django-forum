@@ -3,9 +3,80 @@
 {% block content %}
 
 <body class="bg-[rgb(18,18,18)] pt-12">
-  <h1 class="text-white text-2xl text-center">forum <3 </h1>
+    <div class="max-w-4xl mx-auto mt-8 h-20">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {% for thread in threads %}
+        <a href="{% url 'theme-detail' pk=thread.pk %}" class="block">
+          <div class="bg-[rgb(23,23,23)] rounded-lg p-6 shadow-md/40 hover:bg-[rgb(25,25,25)] transition-colors duration-300">
+            <h2 class="text-xl font-semibold text-white mb-2 truncate">{{ thread.title }}</h2>
+            <p class="text-gray-300 mb-4">
+            Тема від {{ thread.author }} &nbsp;•&nbsp; <span class="relative-time">{{ thread.created_at|date:"c" }}</span>
+          </p>
+          </div>
+        </a>
+      {% empty %}
+        <div class="col-span-full">
+          <p class="text-white text-center">Немає нових тем.</p>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
 </body>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  function getUkrainianPlural(number, one, few, many) {
+    number = Math.abs(number);
+    if (number % 10 === 1 && number % 100 !== 11) { return one; }
+    if ([2, 3, 4].includes(number % 10) && ![12, 13, 14].includes(number % 100)) { return few; }
+    return many;
+  }
+
+  // Функція тепер приймає ОБ'ЄКТ дати, а не рядок
+  function toRelativeTime(date) {
+    const now = new Date();
+    const seconds = Math.round((now - date) / 1000);
+    const minutes = Math.round(seconds / 60);
+    const hours = Math.round(minutes / 60);
+    const days = Math.round(hours / 24);
+    const months = Math.round(days / 30.44);
+    const years = Math.round(days / 365.25);
+
+    if (seconds < 60) {
+      return 'щойно';
+    } else if (minutes < 60) {
+      return `${minutes} ${getUkrainianPlural(minutes, 'хвилину', 'хвилини', 'хвилин')} тому`;
+    } else if (hours < 24) {
+      return `${hours} ${getUkrainianPlural(hours, 'годину', 'години', 'годин')} тому`;
+    } else if (days < 30) {
+      return `${days} ${getUkrainianPlural(days, 'день', 'дні', 'днів')} тому`;
+    } else if (months < 12) {
+      return `${months} ${getUkrainianPlural(months, 'місяць', 'місяці', 'місяців')} тому`;
+    } else {
+      return `${years} ${getUkrainianPlural(years, 'рік', 'роки', 'років')} тому`;
+    }
+  }
+
+  const timeElements = document.querySelectorAll('.relative-time');
+  timeElements.forEach(element => {
+    const dateString = (element.textContent || element.innerText).trim();
+    if (dateString) {
+      const date = new Date(dateString);
+
+      // ПЕРЕВІРКА: чи є дата валідною
+      if (isNaN(date.getTime())) {
+        // Якщо дата не розпізнана, виводимо помилку
+        console.error("Не вдалося розпізнати формат дати:", dateString);
+        // Можна також показати помилку користувачу
+        element.textContent = `[Невірний формат: ${dateString}]`;
+      } else {
+        // Якщо все добре, конвертуємо час
+        element.textContent = toRelativeTime(date);
+      }
+    }
+  });
+});
+</script>
 </html>
 
 {% endblock %}

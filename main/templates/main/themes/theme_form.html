@@ -1,0 +1,17 @@
+{% include "main/base.html" %}
+{% include 'main/navbar.html' %}
+{% block content %}
+
+<body class="bg-[rgb(18,18,18)] pt-12">
+    <h1 class="text-white text-2xl text-center">{% if object %}Edit{% else %}Create{% endif %} Theme</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+</form>
+<a href="{% url 'theme-list' %}">Back to Themes</a>
+</body>
+
+</html>
+
+{% endblock %}
