@@ -6,21 +6,28 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .forms import RegisterForm
-
-
 
 class ThemeListView(ListView):
     model = Thread
     template_name = "main/theme_list.html"
     context_object_name = "themes"
 
-class ThemeCreateView(CreateView):
+class ThemeCreateView(LoginRequiredMixin, CreateView):
     model = Thread
-    fields = ["title", "content"]
+    fields = ["title", "content", "category"]
     template_name = "main/theme_form.html"
     success_url = reverse_lazy("theme-list")
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user  # set author automatically
+        if not form.instance.category_id:
+            default_category, created = Category.objects.get_or_create(title="General")
+            form.instance.category = default_category
+        return super().form_valid(form)
+
 
 class ThemeUpdateView(UpdateView):
     model = Thread
