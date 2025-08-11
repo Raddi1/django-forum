@@ -10,6 +10,7 @@ urlpatterns = [
   path("themes/<int:pk>/delete/", views.ThemeDeleteView.as_view(), name="theme-delete"),
   path('ban/', views.ban_page, name='ban_page'),
   path('root/', views.root_page, name='root_page'),
+  path('rules/', views.rules_page, name='rules_page'),
 
 
   path("login/", LoginView.as_view(), name="login"),

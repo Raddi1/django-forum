@@ -51,7 +51,7 @@ def register_page(request):
             login(request, user)
             return redirect('home_page')
         else:
-            return HttpResponse("Invalid form submission")
+            return render(request, 'registration/register.html', {'form': form})
     else:
         form = RegisterForm()
     return render(request, 'registration/register.html', {
@@ -63,6 +63,9 @@ def register_page(request):
     
 def main_page(request):
     return render(request, 'main/index.html')
+
+def rules_page(request):
+    return render(request, 'main/rules.html')
 
 
 def root_page(request):
