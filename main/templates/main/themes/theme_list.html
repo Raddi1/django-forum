@@ -1,23 +1,40 @@
-{% include "main/base.html" %}
-{% include 'main/navbar.html' %}
 {% block content %}
-
-<body class="bg-[rgb(18,18,18)] pt-12">
-    <h1 class="text-white text-2xl text-center" >Themes</h1>
+<h1>Themes</h1>
 <a href="{% url 'theme-add' %}">Add Theme</a>
-<ul>
-  {% for theme in themes %}
-  <li>
-    <strong>{{ theme.name }}</strong>: {{ theme.description }}
+
+{% for theme in themes %}
+<div class="thread">
+    <h2>{{ theme.name }}</h2>
+    <p>{{ theme.description }}</p>
+
+
     [<a href="{% url 'theme-edit' theme.pk %}">Edit</a>]
     [<a href="{% url 'theme-delete' theme.pk %}">Delete</a>]
-  </li>
-  {% empty %}
-  <li>No themes available.</li>
-  {% endfor %}
-</ul>
-</body>
 
-</html>
+    <h4>Коментарі:</h4>
+    {% for comment in theme.comments.all %}
+        <div class="comment" style="margin-left: 15px; border-left: 2px solid #ddd; padding-left: 10px;">
+            <b>{{ comment.author.username }}</b> — {{ comment.created_at|date:"d.m.Y H:i" }}<br>
+            {{ comment.content }}
+        </div>
+    {% empty %}
+        <p>Комментаріїв нема</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <form method="post" style="margin-top: 10px;">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <input type="hidden" name="thread_id" value="{{ theme.id }}">
+            <button type="submit">Додати коментар</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Залогінтесь</a>, щоб залишити коментар.</p>
+    {% endif %}
+</div>
+<hr>
+{% empty %}
+<p>No themes available.</p>
+{% endfor %}
 
 {% endblock %}
