@@ -14,6 +14,19 @@ class ThemeListView(ListView):
     model = Thread
     template_name = "main/themes/theme_list.html"
     context_object_name = "themes"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["comment_form"] = CommentForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = CommentForm(request.POST)
+        if form.is_valid() and request.user.is_authenticated:
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.thread_id = request.POST.get("thread_id")
+            comment.save()
+        return redirect("theme-list")
 
 class ThemeCreateView(LoginRequiredMixin, CreateView):
     model = Thread
