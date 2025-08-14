@@ -1,17 +1,106 @@
 {% include "main/base.html" %}
 {% include 'main/navbar.html' %}
 {% block content %}
+<body class="bg-[rgb(18,18,18)] min-h-screen flex items-center justify-center px-6">
+  <form method="post" class="w-full max-w-[650px] space-y-4" id="thread-form">
+    {% csrf_token %}
+    <div>
+      <input
+        type="text"
+        name="title"
+        placeholder="Заголовок"
+        required
+        spellcheck="false"
+        class="w-full h-[40px] bg-transparent border border-white/30 rounded-md px-4 
+               text-white placeholder:text-white/60 
+               focus:outline-none focus:border-white transition-colors duration-200"/>
+    </div>
 
-<body class="bg-[rgb(18,18,18)] pt-12">
-    <h1 class="text-white text-2xl text-center">{% if object %}Edit{% else %}Create{% endif %} Theme</h1>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Save</button>
-</form>
-<a href="{% url 'theme-list' %}">Back to Themes</a>
+    <input type="hidden" name="content" id="content-input">
+
+    <!-- Редактор TipTap да-->
+    <div id="hs-editor-tiptap" class="bg-transparent border border-white/30 rounded-md px-4 
+               text-white placeholder:text-white/60 
+               focus:outline-none focus:border-white transition-colors duration-200">
+      <div class="flex flex-wrap gap-1 border-b border-white/20 p-2 text-white text-sm">
+        <button type="button" data-bold class="px-2 py-1 hover:bg-white/10 rounded font-bold">B</button>
+        <button type="button" data-italic class="px-2 py-1 hover:bg-white/10 rounded italic">I</button>
+        <button type="button" data-underline class="px-2 py-1 hover:bg-white/10 rounded underline">U</button>
+        <button type="button" data-code class="px-2 py-1 hover:bg-white/10 rounded">{ }</button>
+        <button type="button" data-image class="px-2 py-1 hover:bg-white/10 rounded"> <img width="20" height="20" src="https://img.icons8.com/small/50/FFFFFF/image.png" alt="image"/> </button>
+      </div>
+      <div class="tiptap min-h-[160px] text-white" spellcheck="false" data-placeholder="Напишіть повідомлення..."></div>
+    </div>
+
+
+    <div>
+      <input type="hidden" name="category" value="2">
+    </div>
+    <button
+      type="submit"
+      class="w-full bg-white text-black rounded-md py-2 font-medium hover:bg-gray-200 transition-colors duration-200">
+      Створити тему
+    </button>
+  </form>
+
+
+    <script type="module">
+    import { Editor } from 'https://esm.sh/@tiptap/core@2.11.0'
+    import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.11.0'
+    import Placeholder from 'https://esm.sh/@tiptap/extension-placeholder@2.11.0'
+    import Underline from 'https://esm.sh/@tiptap/extension-underline@2.11.0'
+    import Image from 'https://esm.sh/@tiptap/extension-image@2.11.0'
+
+    const editor = new Editor({
+      element: document.querySelector('.tiptap'),
+      editorProps: {
+        attributes: {
+          class: 'p-3 focus:outline-none', 
+        },
+      },
+      extensions: [
+        StarterKit,
+        Underline,
+        Placeholder.configure({ placeholder: 'Напишіть повідомлення...' }),
+        Image
+      ],
+      content: ''
+    })
+
+    // Toolbar actions
+    document.querySelector('[data-bold]').onclick = () => editor.chain().focus().toggleBold().run()
+    document.querySelector('[data-italic]').onclick = () => editor.chain().focus().toggleItalic().run()
+    document.querySelector('[data-underline]').onclick = () => editor.chain().focus().toggleUnderline().run()
+    document.querySelector('[data-code]').onclick = () => editor.chain().focus().toggleCode().run()
+    document.querySelector('[data-image]').onclick = async () => {
+      const file = await selectFile()
+      if (!file) return
+      const url = await uploadImage(file)
+      if (url) editor.chain().focus().setImage({ src: url }).run()
+    }
+
+    function selectFile() {
+      return new Promise(resolve => {
+        const input = document.createElement('input')
+        input.type = 'file'
+        input.accept = 'image/*'
+        input.onchange = () => resolve(input.files[0])
+        input.click()
+      })
+    }
+
+    async function uploadImage(file) {
+      const form = new FormData()
+      form.append('image', file)
+      const apiKey = '71fcd643ff2db18c06022e8cdf5a48a3'
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, { method: 'POST', body: form })
+      const data = await res.json()
+      return data?.data?.url
+    }
+
+    document.getElementById('thread-form').addEventListener('submit', e => {
+      document.getElementById('content-input').value = editor.getHTML()
+    })
+  </script>
 </body>
-
-</html>
-
 {% endblock %}

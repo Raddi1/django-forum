@@ -32,7 +32,7 @@ class ThemeCreateView(LoginRequiredMixin, CreateView):
     model = Thread
     fields = ["title", "content", "category"]
     template_name = "main/themes/theme_form.html"
-    success_url = reverse_lazy("theme-list")
+    success_url = reverse_lazy("home_page")
 
     def form_valid(self, form):
         form.instance.author = self.request.user  # set author automatically
@@ -58,10 +58,26 @@ class ThemeDeleteView(DeleteView):
         return thread.author == self.request.user
     def check_failed(self):
         return render('main/error_page.html')
-
+    
+@login_required
 def theme_detail(request, pk):
     thread = get_object_or_404(Thread, pk=pk)
-    return render(request, 'main/themes/theme_detail.html', { "thread": thread })
+    comments = Comment.objects.filter(thread=thread)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid() and request.user.is_authenticated:
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.thread = thread
+            comment.save()
+            return redirect('theme-detail', pk=pk)
+    else:
+        form = CommentForm()
+    return render(request, 'main/themes/theme_detail.html', {
+        "thread": thread,
+        "comments": comments,
+        "comment_form": form
+    })
 
 
     # ---- Всі дії із логіном, реєстрацією і т.д

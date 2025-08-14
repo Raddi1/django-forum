@@ -1,1 +1,98 @@
-{{ thread.title }}
+{% include "main/base.html" %}
+{% include 'main/navbar.html' %}
+{% block content %}
+<body class="bg-[rgb(18,18,18)] min-h-screen text-white pt-12">
+  <div class="container mx-auto max-w-[1024px] px-4 space-y-4 mt-8">
+
+    <div class="bg-[rgb(23,23,23)] p-5 rounded-lg">
+      <h1 class="text-2xl font-bold mb-2">{{ thread.title }}</h1>
+      <p class="text-sm text-gray-400">
+        Тема створена користувачем <a class="font-bold text-red-400">{{ thread.author }}</a>
+        &nbsp;•&nbsp; 
+        <span class="relative-time" title="{{ thread.created_at|date:"c" }}">{{ thread.created_at|date:"c" }}</span>
+      </p>
+    </div>
+
+
+    <div class="bg-[rgb(23,23,23)] p-4 px-4 rounded-lg flex space-x-4">
+      <div class="flex-grow">
+          
+          <div class="prose prose-invert max-w-none text-white/90">
+            {{ thread.content|safe }}
+          </div>
+
+      </div>
+    </div>
+<h4>Коментарі:</h4>
+    {% for comment in theme.comments.all %}
+        <div class="comment" style="margin-left: 15px; border-left: 2px solid #ddd; padding-left: 10px;">
+            <b>{{ comment.author.username }}</b> — {{ comment.created_at|date:"d.m.Y H:i" }}<br>
+            {{ comment.content }}
+        </div>
+    {% empty %}
+        <p>Комментаріїв нема</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <form method="post" style="margin-top: 10px;">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <input type="hidden" name="thread_id" value="{{ theme.id }}">
+            <button type="submit">Додати коментар</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Залогінтесь</a>, щоб залишити коментар.</p>
+    {% endif %}
+  </div>
+
+</body>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  function getUkrainianPlural(number, one, few, many) {
+    number = Math.abs(number);
+    if (number % 10 === 1 && number % 100 !== 11) { return one; }
+    if ([2, 3, 4].includes(number % 10) && ![12, 13, 14].includes(number % 100)) { return few; }
+    return many;
+  }
+
+  function toRelativeTime(date) {
+    const now = new Date();
+    const seconds = Math.round((now - date) / 1000);
+    const minutes = Math.round(seconds / 60);
+    const hours = Math.round(minutes / 60);
+    const days = Math.round(hours / 24);
+    const months = Math.round(days / 30.44);
+    const years = Math.round(days / 365.25);
+
+    if (seconds < 60) {
+      return 'щойно';
+    } else if (minutes < 60) {
+      return `${minutes} ${getUkrainianPlural(minutes, 'хвилину', 'хвилини', 'хвилин')} тому`;
+    } else if (hours < 24) {
+      return `${hours} ${getUkrainianPlural(hours, 'годину', 'години', 'годин')} тому`;
+    } else if (days < 30) {
+      return `${days} ${getUkrainianPlural(days, 'день', 'дні', 'днів')} тому`;
+    } else if (months < 12) {
+      return `${months} ${getUkrainianPlural(months, 'місяць', 'місяці', 'місяців')} тому`;
+    } else {
+      return `${years} ${getUkrainianPlural(years, 'рік', 'роки', 'років')} тому`;
+    }
+  }
+
+  const timeElements = document.querySelectorAll('.relative-time');
+  timeElements.forEach(element => {
+    const dateString = element.getAttribute('title') || element.textContent;
+    if (dateString) {
+      const date = new Date(dateString);
+      if (!isNaN(date.getTime())) {
+        element.textContent = toRelativeTime(date);
+      } else {
+        console.error("Не вдалося розпізнати формат дати:", dateString);
+        element.textContent = `[невірна дата]`;
+      }
+    }
+  });
+});
+</script>
+{% endblock %}
