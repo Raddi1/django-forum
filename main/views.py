@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import User, BanUser, Category, Comment, Thread, User
+from .models import User, BanUser, Comment, Thread, User
 from django.urls import reverse_lazy
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
@@ -19,26 +19,14 @@ class ThemeListView(ListView):
         context["comment_form"] = CommentForm()
         return context
 
-    def post(self, request, *args, **kwargs):
-        form = CommentForm(request.POST)
-        if form.is_valid() and request.user.is_authenticated:
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.thread_id = request.POST.get("thread_id")
-            comment.save()
-        return redirect("theme-list")
-
 class ThemeCreateView(LoginRequiredMixin, CreateView):
     model = Thread
-    fields = ["title", "content", "category"]
+    fields = ["title", "content"]
     template_name = "main/themes/theme_form.html"
     success_url = reverse_lazy("home_page")
 
     def form_valid(self, form):
-        form.instance.author = self.request.user  # set author automatically
-        if not form.instance.category_id:
-            default_category, created = Category.objects.get_or_create(title="General")
-            form.instance.category = default_category
+        form.instance.author = self.request.user  # 
         return super().form_valid(form)
 
 
