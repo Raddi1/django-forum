@@ -47,7 +47,6 @@ class ThemeDeleteView(DeleteView):
     def check_failed(self):
         return render('main/error_page.html')
     
-@login_required
 def theme_detail(request, pk):
     thread = get_object_or_404(Thread, pk=pk)
     comments = Comment.objects.filter(thread=thread)
@@ -73,6 +72,9 @@ def theme_detail(request, pk):
 def logout_page(request):
     logout(request)
     return redirect('home_page')
+
+def comment_page(request):
+    return render(request, 'main/commentarii.html')
 
 
 def register_page(request):

@@ -23,23 +23,35 @@
 
       </div>
     </div>
-<h4>Коментарі:</h4>
-    {% for comment in theme.comments.all %}
-        <div class="comment" style="margin-left: 15px; border-left: 2px solid #ddd; padding-left: 10px;">
-            <b>{{ comment.author.username }}</b> — {{ comment.created_at|date:"d.m.Y H:i" }}<br>
-            {{ comment.content }}
-        </div>
-    {% empty %}
-        <p>Комментаріїв нема</p>
-    {% endfor %}
+          <div class="space-y-2">
+            <h4 class="text-white font-medium mb-2">Коментарі:</h4>
+            {% for comment in thread.comments.all %}
+              <div class="bg-[rgb(23,23,23)] rounded-lg p-3">
+                <b class="text-violet-400">{{ comment.author.username }}</b>
+                <p class="text-gray-200">{{ comment.content }}</p>
+              </div>
+            {% empty %}
+              <p class="text-gray-400">Комментаріїв нема</p>
+            {% endfor %}
+          </div>
 
     {% if user.is_authenticated %}
         <form method="post" style="margin-top: 10px;">
             {% csrf_token %}
-            {{ comment_form.as_p }}
+            <div class="flex items-center space-x-2">
+              <input
+                type="text"
+                name="content"
+                placeholder="Напишіть ваш коментар..."
+                required
+                class="flex-1 bg-transparent border border-white/30 rounded-lg px-4 py-2 
+                       text-white placeholder:text-white/60 
+                       focus:outline-none focus:border-white transition-colors duration-200"/>
+              <button type="submit">
+                <img width="32" height="32" src="https://img.icons8.com/sf-black-filled/64/FFFFFF/paper-plane.png" alt="paper-plane"/>
+              </button>
+            </div>
             <input type="hidden" name="thread_id" value="{{ theme.id }}">
-            <button type="submit">Додати коментар</button>
-        </form>
     {% else %}
         <p><a href="{% url 'login' %}">Залогінтесь</a>, щоб залишити коментар.</p>
     {% endif %}
