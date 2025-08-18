@@ -3,13 +3,13 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import User, Comment
 
 class CommentForm(forms.ModelForm):
-  class Meta:
-    model = Comment
-    fields = ['content', 'author', 'parent']
-    widget = {
-        'content': forms.Textarea(attrs={'rows': 3}),
-        'parent': forms.HiddenInput
-      }
+    class Meta:
+        model = Comment
+        fields = ['content',]
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 3}),
+        }
+
     
 
 class RegisterForm(UserCreationForm):
